@@ -7,11 +7,22 @@
 <style>
   :root { --bg:#faf8f5; --card:#ffffff; --ink:#2b2b2b; --muted:#777; --accent:#c0392b; --line:#e8e3dc; }
   * { box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
   body { margin:0; background:var(--bg); color:var(--ink); font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; line-height:1.7; }
-  .wrap { max-width:760px; margin:0 auto; padding:24px 18px 60px; }
-  header { text-align:center; padding:28px 0 16px; }
-  header h1 { font-size:24px; margin:0 0 6px; }
+  .wrap { max-width:760px; margin:0 auto; padding:18px 18px 60px; }
+  header { text-align:center; padding:16px 0 8px; }
+  header h1 { font-size:24px; margin:0 0 4px; }
   header p { color:var(--muted); margin:0; font-size:14px; }
+
+  /* 顶部导航：章节切换 + 搜索（sticky 便于随时切换，不影响阅读） */
+  .bar { position:sticky; top:0; z-index:10; background:var(--bg); padding:8px 0 10px; border-bottom:1px solid var(--line); margin-bottom:14px; }
+  .tabs { display:flex; flex-wrap:wrap; gap:8px; }
+  .tab { border:1px solid var(--line); background:var(--card); border-radius:20px; padding:6px 14px; font-size:14px; cursor:pointer; color:var(--ink); }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .searchwrap { margin-top:10px; }
+  #search { width:100%; box-sizing:border-box; padding:7px 12px; border:1px solid var(--line); border-radius:20px; font-size:14px; background:#fff; color:var(--ink); }
+  #search:focus { outline:none; border-color:var(--accent); }
+
   .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px; margin:16px 0; box-shadow:0 1px 3px rgba(0,0,0,.04); }
   h2 { font-size:19px; border-left:4px solid var(--accent); padding-left:10px; margin:22px 0 12px; }
   h3 { font-size:16px; margin:18px 0 8px; }
@@ -20,22 +31,71 @@
   th { background:#faf7f2; }
   code { background:#f2f0ec; border-radius:4px; padding:1px 5px; font-family:Consolas,monospace; font-size:.92em; }
   pre { background:#f6f4f0; border:1px solid var(--line); border-radius:8px; padding:12px 14px; overflow-x:auto; font-size:13px; }
+  mark { background:#ffe67a; padding:0 2px; border-radius:2px; }
   .trap { border-left:3px solid #e67e22; background:#fdf6ec; padding:10px 12px; border-radius:6px; margin:10px 0; }
   .hint { color:var(--muted); font-size:13px; }
   .pill { display:inline-block; background:#fdecea; color:var(--accent); border-radius:20px; padding:2px 10px; font-size:12px; }
   .ok { display:inline-block; background:#e6f4ea; color:#1e7d46; border-radius:20px; padding:2px 10px; font-size:12px; }
   .err { background:#fdf3f3; border-left:3px solid var(--accent); padding:12px 14px; border-radius:6px; margin:12px 0; }
   footer { text-align:center; color:var(--muted); font-size:12px; margin-top:30px; }
+  mark { background:#ffe67a; padding:0 2px; border-radius:2px; }
 </style>
 </head>
 <body>
 <div class="wrap">
+
   <header>
     <h1>行测备考笔记</h1>
     <p>资料分析 · 持续更新 ｜ 手机随时翻看</p>
   </header>
 
-  <div class="card">
+  <nav class="bar">
+    <div class="tabs" id="tabs">
+      <button type="button" class="tab active" data-tab="all">全部</button>
+      <button type="button" class="tab" data-tab="l1">第1课</button>
+      <button type="button" class="tab" data-tab="l2">第2课</button>
+      <button type="button" class="tab" data-tab="errors">错题本</button>
+    </div>
+    <div class="searchwrap">
+      <input id="search" type="search" placeholder="搜索：增长率 / 截位 / n+1 …" aria-label="搜索">
+    </div>
+  </nav>
+
+  <section class="card" id="l1" data-card="l1">
+    <h2>第1课 · 资料分析：四大天王 + 截位直除</h2>
+    <p class="hint">模块：资料分析 ｜ 日期：2026-10-29 ｜ 本课正确率 3 中 2</p>
+
+    <h3>一、四大天王（资料分析的地基）</h3>
+    <table>
+      <tr><th>名词</th><th>白话</th><th>举例（去年8000→今年10000）</th></tr>
+      <tr><td>基期量</td><td>起点、过去的数</td><td>8000</td></tr>
+      <tr><td>现期量</td><td>现在、当前的数</td><td>10000</td></tr>
+      <tr><td>增长量</td><td>涨了多少“量”（绝对）</td><td>2000</td></tr>
+      <tr><td>增长率</td><td>涨了多少“率”（比例）</td><td>25%</td></tr>
+    </table>
+
+    <h3>二、三条必背公式</h3>
+    <pre>增长量 = 现期量 − 基期量
+增长率 = 增长量 ÷ 基期量      ★ 率除基期 · 除旧不除新
+基期量 = 现期量 ÷ (1 + 增长率)</pre>
+
+    <h3>三、三大文字陷阱</h3>
+    <div class="trap"><b>1. 增加了 vs 增加到</b><br>增加到 10000 → 现在就是 10000；增加了 10000 → 比原来多 10000。</div>
+    <div class="trap"><b>2. 同比 vs 环比</b><br>同比 = 跟去年同月比；环比 = 跟上个月比。</div>
+    <div class="trap"><b>3. 下降也是增长</b><br>“同比下降 3%” = 增长率是 <code>-3%</code>，负号要带着算。</div>
+
+    <h3>四、速算神功：截位直除</h3>
+    <p>选项首位各不同 → 保留 2 位直接除；首位同第二位不同 → 保留 3 位。例：<code>0.45÷9.44</code> → <code>45÷9.4≈4.8%</code>。</p>
+
+    <h3>五、速记口诀</h3>
+    <ul>
+      <li>率除基期，<b>除旧不除新</b></li>
+      <li>定位防坑：<b>先看主体，再对数据</b></li>
+      <li>提速神器：<b>截位直除，看选项差距</b></li>
+    </ul>
+  </section>
+
+  <section class="card" id="l2" data-card="l2">
     <h2>第2课 · 增长量 n+1 秒杀 + 特殊分数化</h2>
     <p class="hint">模块：资料分析 ｜ 日期：2026-10-30 ｜ 本课：错题①重测通过；n+1 两题全对；挑战题未解</p>
 
@@ -79,43 +139,9 @@
       <li>不规则增速：就近取分数，或现期×r</li>
       <li>多环节题：<b>先各算各 → 统一单位 → 再相比</b></li>
     </ul>
-  </div>
+  </section>
 
-  <div class="card">
-    <h2>第1课 · 资料分析：四大天王 + 截位直除</h2>
-    <p class="hint">模块：资料分析 ｜ 日期：2026-10-29 ｜ 本课正确率 3 中 2</p>
-
-    <h3>一、四大天王</h3>
-    <table>
-      <tr><th>名词</th><th>白话</th><th>举例（去年8000→今年10000）</th></tr>
-      <tr><td>基期量</td><td>起点、过去的数</td><td>8000</td></tr>
-      <tr><td>现期量</td><td>现在、当前的数</td><td>10000</td></tr>
-      <tr><td>增长量</td><td>涨了多少“量”（绝对）</td><td>2000</td></tr>
-      <tr><td>增长率</td><td>涨了多少“率”（比例）</td><td>25%</td></tr>
-    </table>
-
-    <h3>二、三条必背公式</h3>
-    <pre>增长量 = 现期量 − 基期量
-增长率 = 增长量 ÷ 基期量      ★ 率除基期 · 除旧不除新
-基期量 = 现期量 ÷ (1 + 增长率)</pre>
-
-    <h3>三、三大文字陷阱</h3>
-    <div class="trap"><b>1. 增加了 vs 增加到</b><br>增加到 10000 → 现在就是 10000；增加了 10000 → 比原来多 10000。</div>
-    <div class="trap"><b>2. 同比 vs 环比</b><br>同比 = 跟去年同月比；环比 = 跟上个月比。</div>
-    <div class="trap"><b>3. 下降也是增长</b><br>“同比下降 3%” = 增长率是 <code>-3%</code>，负号要带着算。</div>
-
-    <h3>四、速算神功：截位直除</h3>
-    <p>选项首位各不同 → 保留 2 位直接除；首位同第二位不同 → 保留 3 位。例：<code>0.45÷9.44</code> → <code>45÷9.4≈4.8%</code>。</p>
-
-    <h3>五、速记口诀</h3>
-    <ul>
-      <li>率除基期，<b>除旧不除新</b></li>
-      <li>定位防坑：<b>先看主体，再对数据</b></li>
-      <li>提速神器：<b>截位直除，看选项差距</b></li>
-    </ul>
-  </div>
-
-  <div class="card">
+  <section class="card" id="errors" data-card="errors">
     <h2>累积错题本</h2>
 
     <h3>错题 1 · 基期量定位（第1课）<span class="ok">已掌握</span></h3>
@@ -133,9 +159,79 @@
       <b>纠错：</b>不规则增速三招；先各算再比、先统一单位
     </div>
     <p class="hint">※ 下次开课热身优先重测错题2。</p>
-  </div>
+  </section>
 
   <footer>行测训练系统 · TeleAgent 教练 · 每课自动生成</footer>
 </div>
+
+<script>
+(function () {
+  'use strict';
+  var cards = document.querySelectorAll('[data-card]');
+  var orig = {};
+  cards.forEach(function (c) { orig[c.id] = c.innerHTML; });
+  var tabs = document.querySelectorAll('.tab');
+  var search = document.getElementById('search');
+  var currentTab = 'all';
+
+  function escapeRegExp(s) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function setTab(tab) {
+    currentTab = tab;
+    search.value = '';
+    tabs.forEach(function (b) { b.classList.toggle('active', b.dataset.tab === tab); });
+    cards.forEach(function (c) {
+      c.innerHTML = orig[c.id];
+      c.style.display = (tab === 'all' || c.id === tab) ? '' : 'none';
+    });
+  }
+
+  tabs.forEach(function (b) {
+    b.addEventListener('click', function () { setTab(b.dataset.tab); });
+  });
+
+  function highlight(el, q) {
+    var re2 = new RegExp(escapeRegExp(q), 'gi');
+    var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        return n.nodeValue.toLowerCase().indexOf(q) >= 0 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+      }
+    });
+    var list = [];
+    var node;
+    while ((node = walker.nextNode())) list.push(node);
+    list.forEach(function (n) {
+      var frag = document.createDocumentFragment();
+      var low = n.nodeValue.toLowerCase();
+      var last = 0, m;
+      re2.lastIndex = 0;
+      while ((m = re2.exec(low))) {
+        frag.appendChild(document.createTextNode(n.nodeValue.substring(last, m.index)));
+        var mk = document.createElement('mark');
+        mk.textContent = n.nodeValue.substring(m.index, m.index + m[0].length);
+        frag.appendChild(mk);
+        last = m.index + m[0].length;
+      }
+      frag.appendChild(document.createTextNode(n.nodeValue.substring(last)));
+      n.parentNode.replaceChild(frag, n);
+    });
+  }
+
+  search.addEventListener('input', function () {
+    var q = search.value.trim().toLowerCase();
+    if (!q) { setTab(currentTab); return; }
+    cards.forEach(function (c) {
+      c.innerHTML = orig[c.id];
+      var show = c.innerText.toLowerCase().indexOf(q) >= 0;
+      c.style.display = show ? '' : 'none';
+      if (show) highlight(c, q);
+    });
+  });
+
+  setTab('all');
+})();
+</script>
 </body>
 </html>
