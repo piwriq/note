@@ -9,19 +9,41 @@
   * { box-sizing:border-box; }
   html { -webkit-text-size-adjust:100%; }
   body { margin:0; background:var(--bg); color:var(--ink); font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; line-height:1.7; }
-  .wrap { max-width:760px; margin:0 auto; padding:18px 18px 60px; }
+  .wrap { max-width:760px; margin:0 auto; padding:18px 18px 60px; transition:margin .25s ease; }
+  /* 桌面端：抽屉推开正文而非覆盖 */
+  @media (min-width:900px) {
+    body.drawer-open .wrap { margin-left:356px; }
+  }
   header { text-align:center; padding:16px 0 8px; }
   header h1 { font-size:24px; margin:0 0 4px; }
   header p { color:var(--muted); margin:0; font-size:14px; }
 
-  /* 顶部导航：章节切换 + 搜索（sticky 便于随时切换，不影响阅读） */
-  .bar { position:sticky; top:0; z-index:10; background:var(--bg); padding:8px 0 10px; border-bottom:1px solid var(--line); margin-bottom:14px; }
-  .tabs { display:flex; flex-wrap:wrap; gap:8px; }
-  .tab { border:1px solid var(--line); background:var(--card); border-radius:20px; padding:6px 14px; font-size:14px; cursor:pointer; color:var(--ink); }
-  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
-  .searchwrap { margin-top:10px; }
-  #search { width:100%; box-sizing:border-box; padding:7px 12px; border:1px solid var(--line); border-radius:20px; font-size:14px; background:#fff; color:var(--ink); }
+  /* 顶栏：菜单 + 最新 + 搜索（sticky） */
+  .bar { position:sticky; top:0; z-index:10; background:var(--bg); padding:8px 0 10px; border-bottom:1px solid var(--line); margin-bottom:14px; display:flex; gap:8px; align-items:center; }
+  .bar button { border:1px solid var(--line); background:var(--card); border-radius:20px; padding:6px 13px; font-size:14px; cursor:pointer; color:var(--ink); white-space:nowrap; }
+  .bar button#latestBtn { color:var(--accent); border-color:#eab6ad; background:#fdf3f1; }
+  #search { flex:1; min-width:0; box-sizing:border-box; padding:7px 12px; border:1px solid var(--line); border-radius:20px; font-size:14px; background:#fff; color:var(--ink); }
   #search:focus { outline:none; border-color:var(--accent); }
+
+  /* 目录抽屉 */
+  .overlay { position:fixed; inset:0; background:rgba(0,0,0,.35); opacity:0; pointer-events:none; transition:opacity .2s; z-index:20; }
+  .overlay.show { opacity:1; pointer-events:auto; }
+  .drawer { position:fixed; top:0; left:0; height:100%; width:min(86vw,340px); background:#fff; border-right:1px solid var(--line); transform:translateX(-102%); transition:transform .25s ease; z-index:30; display:flex; flex-direction:column; box-shadow:4px 0 16px rgba(0,0,0,.08); }
+  .drawer.open { transform:none; }
+  .drawer-head { display:flex; justify-content:space-between; align-items:center; padding:14px 16px; border-bottom:1px solid var(--line); font-weight:600; font-size:16px; }
+  .drawer-head button { border:none; background:none; font-size:18px; cursor:pointer; color:var(--muted); padding:4px 8px; }
+  .toc { overflow-y:auto; padding:10px 10px 28px; flex:1; }
+  .toc-latest { width:100%; text-align:left; border:1px solid #eab6ad; color:var(--accent); background:#fdf3f1; border-radius:8px; padding:9px 12px; margin:4px 0 12px; cursor:pointer; font-size:14px; }
+  details.grp { margin:8px 0; }
+  details.grp summary { font-weight:600; padding:8px 10px; border-radius:8px; cursor:pointer; background:#faf7f2; font-size:14px; list-style:none; display:flex; justify-content:space-between; }
+  details.grp summary::-webkit-details-marker { display:none; }
+  details.grp summary::after { content:"▸"; color:var(--muted); }
+  details.grp[open] summary::after { content:"▾"; }
+  .toc-item { display:block; width:100%; text-align:left; border:none; background:none; padding:8px 10px 8px 20px; border-radius:8px; font-size:14px; cursor:pointer; color:var(--ink); line-height:1.5; }
+  .toc-item:hover { background:#f6f3ef; }
+  .toc-item.active { background:#fdecea; color:var(--accent); font-weight:600; }
+  .toc-fixed { margin:12px 0 0; border-top:1px dashed var(--line); padding-top:10px; }
+  .toc-fixed .toc-item { font-weight:600; }
 
   .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px; margin:16px 0; box-shadow:0 1px 3px rgba(0,0,0,.04); }
   h2 { font-size:19px; border-left:4px solid var(--accent); padding-left:10px; margin:22px 0 12px; }
@@ -38,7 +60,6 @@
   .ok { display:inline-block; background:#e6f4ea; color:#1e7d46; border-radius:20px; padding:2px 10px; font-size:12px; }
   .err { background:#fdf3f3; border-left:3px solid var(--accent); padding:12px 14px; border-radius:6px; margin:12px 0; }
   footer { text-align:center; color:var(--muted); font-size:12px; margin-top:30px; }
-  mark { background:#ffe67a; padding:0 2px; border-radius:2px; }
 </style>
 </head>
 <body>
@@ -50,18 +71,12 @@
   </header>
 
   <nav class="bar">
-    <div class="tabs" id="tabs">
-      <button type="button" class="tab active" data-tab="all">全部</button>
-      <button type="button" class="tab" data-tab="l1">第1课</button>
-      <button type="button" class="tab" data-tab="l2">第2课</button>
-      <button type="button" class="tab" data-tab="errors">错题本</button>
-    </div>
-    <div class="searchwrap">
-      <input id="search" type="search" placeholder="搜索：增长率 / 截位 / n+1 …" aria-label="搜索">
-    </div>
+    <button type="button" id="menuBtn" aria-controls="drawer" aria-expanded="false">☰ 目录</button>
+    <button type="button" id="latestBtn">最新</button>
+    <input id="search" type="search" placeholder="搜索：增长率 / 截位 / n+1 …" aria-label="搜索">
   </nav>
 
-  <section class="card" id="l1" data-card="l1">
+  <section class="card" id="l1" data-card="l1" data-lesson="1">
     <h2>第1课 · 资料分析：四大天王 + 截位直除</h2>
     <p class="hint">模块：资料分析 ｜ 日期：2026-10-29 ｜ 本课正确率 3 中 2</p>
 
@@ -95,7 +110,7 @@
     </ul>
   </section>
 
-  <section class="card" id="l2" data-card="l2">
+  <section class="card" id="l2" data-card="l2" data-lesson="2">
     <h2>第2课 · 增长量 n+1 秒杀 + 特殊分数化</h2>
     <p class="hint">模块：资料分析 ｜ 日期：2026-10-30 ｜ 本课：错题①重测通过；n+1 两题全对；挑战题未解</p>
 
@@ -164,50 +179,108 @@
   <footer>行测训练系统 · TeleAgent 教练 · 每课自动生成</footer>
 </div>
 
+<div class="overlay" id="overlay"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-label="章节目录">
+  <div class="drawer-head">
+    <span>目录</span>
+    <button type="button" id="closeBtn" aria-label="关闭目录">✕</button>
+  </div>
+  <nav class="toc">
+    <button type="button" class="toc-latest" data-goto="l2">📌 最新：第2课 · 增长量 n+1</button>
+
+    <details class="grp" open>
+      <summary>资料分析</summary>
+      <button type="button" class="toc-item" data-goto="l1">第1课 · 四大天王与截位直除</button>
+      <button type="button" class="toc-item" data-goto="l2">第2课 · 增长量 n+1 与特殊分数化</button>
+    </details>
+
+    <div class="toc-fixed">
+      <button type="button" class="toc-item" data-goto="errors">⚠️ 错题本（累积）</button>
+    </div>
+  </nav>
+</aside>
+
 <script>
 (function () {
   'use strict';
-  var cards = document.querySelectorAll('[data-card]');
+  var drawer = document.getElementById('drawer');
+  var overlay = document.getElementById('overlay');
+  var menuBtn = document.getElementById('menuBtn');
+  var closeBtn = document.getElementById('closeBtn');
+  var latestBtn = document.getElementById('latestBtn');
+  var search = document.getElementById('search');
+  var cards = [].slice.call(document.querySelectorAll('[data-card]'));
+  var lessons = cards.filter(function (c) { return c.hasAttribute('data-lesson'); });
+  var latest = lessons.length ? lessons[lessons.length - 1].id : cards[0].id;
+  var cur = latest;
+  var KEY = 'xingce-note-last';
   var orig = {};
   cards.forEach(function (c) { orig[c.id] = c.innerHTML; });
-  var tabs = document.querySelectorAll('.tab');
-  var search = document.getElementById('search');
-  var currentTab = 'all';
 
-  function escapeRegExp(s) {
-    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  function resetCards() {
+    cards.forEach(function (c) { c.innerHTML = orig[c.id]; });
   }
 
-  function setTab(tab) {
-    currentTab = tab;
-    search.value = '';
-    tabs.forEach(function (b) { b.classList.toggle('active', b.dataset.tab === tab); });
-    cards.forEach(function (c) {
-      c.innerHTML = orig[c.id];
-      c.style.display = (tab === 'all' || c.id === tab) ? '' : 'none';
+  function view(id, save) {
+    cur = id;
+    cards.forEach(function (c) { c.style.display = (c.id === id) ? '' : 'none'; });
+    [].forEach.call(document.querySelectorAll('.toc-item'), function (b) {
+      b.classList.toggle('active', b.dataset.goto === id);
     });
+    if (save !== false) { try { localStorage.setItem(KEY, id); } catch (e) {} }
+    window.scrollTo(0, 0);
   }
 
-  tabs.forEach(function (b) {
-    b.addEventListener('click', function () { setTab(b.dataset.tab); });
+  function openDrawer() {
+    drawer.classList.add('open');
+    overlay.classList.add('show');
+    menuBtn.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('drawer-open');
+  }
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    overlay.classList.remove('show');
+    menuBtn.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('drawer-open');
+  }
+
+  menuBtn.addEventListener('click', openDrawer);
+  closeBtn.addEventListener('click', closeDrawer);
+  overlay.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDrawer(); });
+
+  [].forEach.call(document.querySelectorAll('.toc-item, .toc-latest'), function (b) {
+    b.addEventListener('click', function () {
+      search.value = '';
+      resetCards();
+      view(b.dataset.goto);
+      closeDrawer();
+    });
   });
 
+  latestBtn.addEventListener('click', function () {
+    search.value = '';
+    resetCards();
+    view(latest);
+  });
+
+  function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
   function highlight(el, q) {
-    var re2 = new RegExp(escapeRegExp(q), 'gi');
+    var re = new RegExp(escapeRegExp(q), 'gi');
     var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
         return n.nodeValue.toLowerCase().indexOf(q) >= 0 ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
       }
     });
-    var list = [];
-    var node;
+    var list = [], node;
     while ((node = walker.nextNode())) list.push(node);
     list.forEach(function (n) {
       var frag = document.createDocumentFragment();
       var low = n.nodeValue.toLowerCase();
       var last = 0, m;
-      re2.lastIndex = 0;
-      while ((m = re2.exec(low))) {
+      re.lastIndex = 0;
+      while ((m = re.exec(low))) {
         frag.appendChild(document.createTextNode(n.nodeValue.substring(last, m.index)));
         var mk = document.createElement('mark');
         mk.textContent = n.nodeValue.substring(m.index, m.index + m[0].length);
@@ -221,16 +294,18 @@
 
   search.addEventListener('input', function () {
     var q = search.value.trim().toLowerCase();
-    if (!q) { setTab(currentTab); return; }
+    if (!q) { resetCards(); view(cur, false); return; }
     cards.forEach(function (c) {
       c.innerHTML = orig[c.id];
-      var show = c.innerText.toLowerCase().indexOf(q) >= 0;
-      c.style.display = show ? '' : 'none';
-      if (show) highlight(c, q);
+      var hit = c.innerText.toLowerCase().indexOf(q) >= 0;
+      c.style.display = hit ? '' : 'none';
+      if (hit) highlight(c, q);
     });
   });
 
-  setTab('all');
+  var saved = null;
+  try { saved = localStorage.getItem(KEY); } catch (e) {}
+  view(saved && document.getElementById(saved) ? saved : latest, false);
 })();
 </script>
 </body>
