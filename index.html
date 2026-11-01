@@ -237,6 +237,47 @@
     </ul>
   </section>
 
+  <section class="card" id="l5" data-card="l5" data-lesson="5">
+    <h2>第5课 · 年均增长 + 提速方法</h2>
+    <p class="hint">模块：资料分析 ｜ 日期：2026-11-01 ｜ 本课战报：2/3（年均增量✓、增速排序✓；百分点回退未解出）；速度首次达标约 40 秒/题</p>
+
+    <h3>一、年均增长量</h3>
+    <div class="trap"><b>年均增长量 = (末期 − 基期) ÷ n</b>，n = 末期年份 − 基期年份（2013→2022 是 9，不是10）</div>
+    <p>材料给“是基期的X倍”→ 先反推基期（现期÷X）再套。真题：10.0万亿、是2013年1.8倍 → 10÷1.8≈5.5 → (10−5.5)÷9 = <b>0.5万亿</b> ✓</p>
+
+    <h3>二、年均增长率</h3>
+    <p>ⁿ√(末期÷基期)−1，考场几乎不开根号：</p>
+    <ul>
+      <li>比大小（n相同）：只比 <b>末期÷基期</b></li>
+      <li>排序题：审清排的是“增速”还是“差值”——真题求城乡差绝对值：京|8.2−7.3|=0.9、津|7.3−6.9|=0.4、冀|8.6−7.1|=1.5 → <b>冀、京、津</b> ✓</li>
+    </ul>
+
+    <h3>三、百分点回退（求基期比重）</h3>
+    <div class="trap"><b>“较2013年提高4.3个百分点” = 过去更低 → 基期 = 现期 − 4.3</b>（百分点是加减世界，别用乘除！83.8÷1.043 是大坑）</div>
+    <p>真题：北京 83.8−4.3=79.5；天津 61.3−7.2=54.1 → 差 <b>25.4 个百分点</b></p>
+
+    <h3>四、速度专项（本课启动）</h3>
+    <ul>
+      <li>读题抓4词：<b>时间/主体/求什么/量还是率</b> → 反查材料，绝不通读</li>
+      <li>计算先看选项差距定截位；口算替代竖式；选项反推验算</li>
+      <li>速算示范：7800÷1.28≈6000（1.28→1.3）；3456÷3.1≈1115（先÷3再调小）</li>
+    </ul>
+
+    <h3>五、本课错题复盘</h3>
+    <div class="err">
+      <b>错题7（新）：</b>百分点回退未应用 → 正解 A 25.4。<br>
+      <b>纠错口诀：</b>提高→回退减，降低→加回。百分点是加减世界。
+    </div>
+
+    <h3>六、速记口诀</h3>
+    <ul>
+      <li>年均增量：<b>末期减基期，除以年份差</b></li>
+      <li>年均增速比大小：n相同只比 <b>末期÷基期</b></li>
+      <li>排序题先审：<b>排“增速”还是排“差值”</b></li>
+      <li>百分点：<b>提高就减，降低就加</b></li>
+    </ul>
+  </section>
+
   <section class="card" id="errors" data-card="errors">
     <h2>累积错题本</h2>
 
@@ -262,12 +303,15 @@
       <b>重测通过：</b>5432÷0.168≈3.2万亿（截位+验算）→ 治愈
     </div>
 
-    <h3>错题 5 · 倍数·是几倍误减1（第4课）<span class="pill">未掌握</span></h3>
-    <div class="err"><b>正解：</b>1.84万亿÷2975.4亿≈6.2倍（“是几倍”直接除，别减1）</div>
+    <h3>错题 5 · 倍数·是几倍误减1（第4课）<span class="pill">待盲测</span></h3>
+    <div class="err"><b>正解：</b>1.84万亿÷2975.4亿≈6.2倍（“是几倍”直接除，别减1；第5课热身答对但答案泄露，待盲测）</div>
 
-    <h3>错题 6 · 间隔增长（第4课）<span class="pill">未掌握</span></h3>
-    <div class="err"><b>正解：</b>19.6%+13.5%+2.6%≈35.7% = r₁+r₂+r₁×r₂</div>
-    <p class="hint">※ 下次开课热身优先：错题2（五测）+ 错题5 + 错题6。</p>
+    <h3>错题 6 · 间隔增长（第4课）<span class="pill">待盲测</span></h3>
+    <div class="err"><b>正解：</b>19.6%+13.5%+2.6%≈35.7% = r₁+r₂+r₁×r₂（第5课热身答对但答案泄露，待盲测）</div>
+
+    <h3>错题 7 · 基期比重·百分点回退（第5课）<span class="pill">未掌握</span></h3>
+    <div class="err"><b>正解：</b>83.8−4.3=79.5；61.3−7.2=54.1 → 差 25.4。<b>“提高X个百分点”= 过去更低，回退用减法</b></div>
+    <p class="hint">※ 下次开课热身：错题2（五测）+ 错题5（盲测）+ 错题6（盲测）+ 错题7（重测）。</p>
   </section>
 
   <footer>行测训练系统 · TeleAgent 教练 · 每课自动生成</footer>
@@ -280,7 +324,7 @@
     <button type="button" id="closeBtn" aria-label="关闭目录">✕</button>
   </div>
   <nav class="toc">
-    <button type="button" class="toc-latest" data-goto="l4">📌 最新：第4课 · 倍数与间隔增长</button>
+    <button type="button" class="toc-latest" data-goto="l5">📌 最新：第5课 · 年均增长与提速</button>
 
     <details class="grp" open>
       <summary>资料分析</summary>
@@ -288,6 +332,7 @@
       <button type="button" class="toc-item" data-goto="l2">第2课 · 增长量 n+1 与特殊分数化</button>
       <button type="button" class="toc-item" data-goto="l3">第3课 · 比重与平均数</button>
       <button type="button" class="toc-item" data-goto="l4">第4课 · 倍数与间隔增长</button>
+      <button type="button" class="toc-item" data-goto="l5">第5课 · 年均增长与提速</button>
     </details>
 
     <div class="toc-fixed">
