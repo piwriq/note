@@ -44,6 +44,8 @@
   .toc-item.active { background:#fdecea; color:var(--accent); font-weight:600; }
   .toc-fixed { margin:12px 0 0; border-top:1px dashed var(--line); padding-top:10px; }
   .toc-fixed .toc-item { font-weight:600; }
+  a.toc-link { display:block; width:100%; text-align:left; border:none; background:none; padding:8px 10px 8px 20px; border-radius:8px; font-size:14px; cursor:pointer; color:var(--accent); line-height:1.5; text-decoration:none; font-weight:600; }
+  a.toc-link:hover { background:#f6f3ef; }
 
   .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px; margin:16px 0; box-shadow:0 1px 3px rgba(0,0,0,.04); }
   h2 { font-size:19px; border-left:4px solid var(--accent); padding-left:10px; margin:22px 0 12px; }
@@ -370,6 +372,7 @@
     </details>
 
     <div class="toc-fixed">
+      <a class="toc-link" href="practice.html">📝 实战练习（图形推理·第8题）</a>
       <button type="button" class="toc-item" data-goto="errors">⚠️ 错题本（累积）</button>
     </div>
   </nav>
