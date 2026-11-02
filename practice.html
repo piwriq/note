@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>实战练习 · 图形推理</title>
+<style>
+  :root { --bg:#faf8f5; --card:#ffffff; --ink:#2b2b2b; --muted:#777; --accent:#c0392b; --line:#e8e3dc; }
+  * { box-sizing:border-box; }
+  html { -webkit-text-size-adjust:100%; }
+  body { margin:0; background:var(--bg); color:var(--ink); font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif; line-height:1.7; }
+  .wrap { max-width:760px; margin:0 auto; padding:18px 18px 60px; }
+  header { text-align:center; padding:16px 0 8px; }
+  header h1 { font-size:22px; margin:0 0 4px; }
+  header p { color:var(--muted); margin:0; font-size:14px; }
+  .back { display:inline-block; margin:10px 0 0; border:1px solid var(--line); background:var(--card); border-radius:20px; padding:6px 14px; font-size:14px; color:var(--ink); text-decoration:none; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px; margin:16px 0; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+  h2 { font-size:19px; border-left:4px solid var(--accent); padding-left:10px; margin:6px 0 12px; }
+  .hint { color:var(--muted); font-size:13px; }
+  .src { display:inline-block; background:#eef4fb; border-radius:20px; padding:2px 12px; font-size:12px; color:#2a5d8f; }
+  .question-img { width:100%; max-width:520px; display:block; margin:14px auto; border:1px solid var(--line); border-radius:8px; }
+  .trap { border-left:3px solid #e67e22; background:#fdf6ec; padding:10px 12px; border-radius:6px; margin:10px 0; }
+  .todo { border-left:3px solid var(--accent); background:#fdf3f3; padding:12px 14px; border-radius:6px; margin:12px 0; }
+  footer { text-align:center; color:var(--muted); font-size:12px; margin-top:30px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>实战练习 · 图形推理</h1>
+    <p>题目图为题库原图渲染 ｜ 看图作答后回复教练批改</p>
+    <a class="back" href="index.html">← 返回笔记主页</a>
+  </header>
+
+  <div class="card">
+    <h2>第 8 课 · 图形推理真题（一）</h2>
+    <p><span class="src">来源：2024年国考 · 判断推理 · 第 9 题</span></p>
+
+    <p><b>题干</b>：从所给的四个选项中，选择最合适的一项填入问号处，使之呈现一定的规律性。</p>
+
+    <img class="question-img" src="img/18c14eaa49cbf96.png" alt="2024国考判断推理第9题 九宫格黑球位置规律">
+
+    <div class="trap"><b>思考提示（用第7课的框架）</b>：
+      <ul>
+        <li>九宫格每行<b>元素组成相同</b>（都是那几个黑球）→ 先想<b>位置类</b></li>
+        <li>找每行黑球<b>怎么移动</b>（方向、步数、到头循环），再套第三行求问号</li>
+        <li>位置题看"挪动轨迹"，不是数黑球个数</li>
+      </ul>
+    </div>
+
+    <div class="todo"><b>作答方式</b>：看好图后，回复教练「第8课选 X + 一句你找到的规律」，教练批改归因。答案未在此页显示，独立完成。</div>
+
+    <p class="hint">※ 图片为本地题库（xingcezhenti）原图，与考场原图一致；手机端可放大查看细节。</p>
+  </div>
+
+  <footer>行测训练系统 · 实战练习页 · 每题一页</footer>
+</div>
+</body>
+</html>
